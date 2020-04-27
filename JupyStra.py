@@ -20,6 +20,7 @@ def parse_args():
     parser.add_argument('-r', '--remote_port', type=str, default='random', help='remote port to use on login node')
     parser.add_argument('-R', '--mem', type=str, default='8G', help='memory allocation for server')
     parser.add_argument('-c', '--cores', type=str, default='1', help='number of cores to allocate to jupyter server')
+    parser.add_argument('--gres',type=str,default=None)
     parser.add_argument('-q', '--queue', type=str, default='short', help='queue for server job execution')
     parser.add_argument('-W', '--wall_time', type=str, default='12:00:00', help='wall time for server existence')
     parser.add_argument('-o', '--outfile', type=str, default='jupyter.lsf', help='LSF output file for server job')

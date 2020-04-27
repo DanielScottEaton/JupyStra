@@ -107,13 +107,18 @@ class Spawner(object):
                    'port_jup': self.args.port
                  }
 
-        cmd = "bash -l -c \"unset XDG_RUNTIME_DIR; "
+        cmd = "bash -l -c \'unset XDG_RUNTIME_DIR; "
 
         if self.args.cmds:
             cmd += "; ".join(self.args.cmds) + "; "
 
-        cmd += "sbatch -p {queue} -t {walltime} -o {outfile} --mem {mem} -c {cores} jupyter notebook --port={port_jup} --no-browser\"".format(**kwargs)
+        cmd += "sbatch "
+        if self.args.gres is not None:
+            cmd += ("--gres=" + self.args.gres + " ")
 
+        cmd +="-p {queue} -t {walltime} -o {outfile} --mem {mem} -c {cores} --wrap=\"jupyter lab --port={port_jup} --no-browser\"\'".format(**kwargs)
+
+        print(cmd)
         stdin, stdout, stderr = self.exec_cmd(cmd, verbose=False, output=True)
         out = stdout.read().decode('utf-8')
 
@@ -155,8 +160,8 @@ class Spawner(object):
             else:
                 print('NO!')
 
-            if count == self.args.count:
-                raise ValueError("number of iterations allowed exceeded")
+            #if count == self.args.count:
+             #   raise ValueError("number of iterations allowed exceeded")
 
             count += 1
             time.sleep(10)
