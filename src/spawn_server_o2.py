@@ -104,8 +104,9 @@ class Spawner(object):
                    'mem': self.args.mem,
                    'cores': self.args.cores,
                    'outfile': self.args.outfile,
-                   'port_jup': self.args.port
-                 }
+                   'port_jup': self.args.port,
+                   'env': self.args.env
+                   }
 
         cmd = "bash -l -c \'unset XDG_RUNTIME_DIR; "
 
@@ -116,7 +117,7 @@ class Spawner(object):
         if self.args.gres is not None:
             cmd += ("--gres=" + self.args.gres + " ")
 
-        cmd +="-p {queue} -t {walltime} -o {outfile} --mem {mem} -c {cores} --wrap=\"jupyter lab --port={port_jup} --no-browser\"\'".format(**kwargs)
+        cmd +="-p {queue} -t {walltime} -o {outfile} --mem {mem} -c {cores} --wrap=\"source activate {env};  jupyter lab --port={port_jup} --no-browser\"\'".format(**kwargs)
 
         print(cmd)
         stdin, stdout, stderr = self.exec_cmd(cmd, verbose=False, output=True)
